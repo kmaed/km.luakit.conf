@@ -2,26 +2,28 @@
 -- Copyright (c) 2019 Kazuki Maeda <kmaeda@kmaeda.net>
 
 local settings = require("settings")
+local lousy = require("lousy")
 
 -- clear history
 local history = require("history")
 history.init()
 local function clearhistory()
-   history.db:exec [[ DELETE FROM history ]]
+   history.db:exec([[ DELETE FROM history ]])
 end
 clearhistory()
 
 -- CSS of settings
 local sc = require("settings_chrome")
 sc.html_style = sc.html_style .. [[
-.setting input {
+input {
     background-color: #000;
     color: #fff;
 }
 ]]
 
--- key binds
+-- key binds (Emacs like)
 local modes = require("modes")
+-- from binds.lua
 local actions = { scroll = {
     up = {
         desc = "Scroll the current page up.",
@@ -78,8 +80,10 @@ modes.add_binds("normal", {
                    {"<Control-b>", actions.scroll.right},
                    {"<Mod1-v>", actions.scroll.page_up},
                    {"<Control-v>", actions.scroll.page_down},
-                   {"<Control-0>", actions.zoom.zoom_set},
-                   {"<Control-=>", actions.zoom.zoom_in},
+                   {"<Control-Mod1-r>", "Reload userconf.lua.",
+                    function(w) dofile(lousy.util.find_config("userconf.lua")); w:enter_cmd(":"); w:set_mode() end},
+                   {"0", actions.zoom.zoom_set},
+                   {"=", actions.zoom.zoom_in},
                    {"o", "Open one or more URLs.",
                     function (w) clearhistory(); w:enter_cmd(":open ") end },
                    {"t", "Open one or more URLs in a new tab.",
@@ -88,10 +92,12 @@ modes.add_binds("normal", {
                      function (w) clearhistory(); w:enter_cmd(":open " .. (w.view.uri or "")) end },
                    {"T", "Open one or more URLs based on current location in a new tab.",
                      function (w) clearhistory(); w:enter_cmd(":tabopen " .. (w.view.uri or "")) end },
-                   {"B", "Go back in the browser history `[count=1]` items.", function (w, m) w:back(m.count) end },
-                   {"F", "Go forward in the browser history `[count=1]` times.", function (w, m) w:forward(m.count) end },
+                   {"B", "Go back in the browser history `[count=1]` items.",
+                    function (w, m) w:back(m.count) end },
+                   {"F", "Go forward in the browser history `[count=1]` times.",
+                    function (w, m) w:forward(m.count) end },
 })
-
 modes.add_binds("passthrough", {
-                   { "<Control-g>", "Return to `normal` mode.", function (w) w:set_prompt(); w:set_mode() end },
+                   { "<Control-g>", "Return to `normal` mode.",
+                     function (w) w:set_prompt(); w:set_mode() end },
 })
