@@ -1,4 +1,4 @@
-# km.luakit.conf （kmaedaさん用 luakit 設定ファイル）
+# km.luakit.conf （kmaedaさん用 Luakit 設定ファイル）
 
 ## Luakit とは
 
