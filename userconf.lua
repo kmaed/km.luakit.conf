@@ -4,6 +4,9 @@
 local settings = require("settings")
 local lousy = require("lousy")
 
+-- always accept cookie
+soup.accept_policy = "always"
+
 -- clear history
 local history = require("history")
 history.init()
