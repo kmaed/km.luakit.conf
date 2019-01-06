@@ -12,15 +12,6 @@ local function clearhistory()
 end
 clearhistory()
 
--- CSS of settings
--- local sc = require("settings_chrome")
--- sc.html_style = sc.html_style .. [[
--- input {
---     background-color: #000;
---     color: #fff;
--- }
--- ]]
-
 -- key binds (Emacs like)
 local modes = require("modes")
 modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "B", "M", "%",
