@@ -13,16 +13,25 @@ end
 clearhistory()
 
 -- CSS of settings
-local sc = require("settings_chrome")
-sc.html_style = sc.html_style .. [[
-input {
-    background-color: #000;
-    color: #fff;
-}
-]]
+-- local sc = require("settings_chrome")
+-- sc.html_style = sc.html_style .. [[
+-- input {
+--     background-color: #000;
+--     color: #fff;
+-- }
+-- ]]
 
 -- key binds (Emacs like)
 local modes = require("modes")
+modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "B", "M", "%",
+                              "gg", "zi", "zo", "zz", "pp", "pt", "pw", "pp", "PP", "PT", "PW",
+                              "gT", "gt", "g0", "g$", "gH", "gh", "gy", "ZZ", "ZQ",
+                              "<Control-e>", "<Control-y>", "<Control-d>", "<Control-u>",
+                              "<Control-o>", "<Control-i>", "<Control-a>", "<Control-x>",
+                              "<Control-w>", "<Control-c>", "<Control-z>", "<Control-R>",
+                              "<Shift-h>", "<Shift-l>", "<Shift-w>", "<Shift-j>", "<Shift-k>",
+                              "<Shift-d>"})
+modes.remove_binds("insert", {"<Control-e>", "<Control-z>"})
 -- from binds.lua
 local actions = { scroll = {
     up = {
@@ -80,9 +89,10 @@ modes.add_binds("normal", {
                     function (w) w:scroll{ ypagerel =  0.95 } end },
                    { "<Shift-space>", "Scroll the current page up",
                     function (w) w:scroll{ ypagerel =  -0.95 } end },
-                   {"<Control-Mod1-r>", "Reload userconf.lua.",
-                    function(w) dofile(lousy.util.find_config("userconf.lua"))
-                       w:enter_cmd(":"); w:set_mode() end},
+                   {"<Control-Mod1-r>", "Restart luakit (reloading configs).",
+                    function (w) w:restart() end },
+                   { "<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
+                     function (w) w:set_mode("passthrough") end },
                    {"0", actions.zoom.zoom_set},
                    {"=", actions.zoom.zoom_in},
                    {"o", "Open one or more URLs.",
@@ -117,6 +127,11 @@ modes.add_binds("normal", {
                                       end
                         })
                    end },
+})
+modes.add_binds("insert", {
+                   { "<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
+                     function (w) w:set_mode("passthrough") end },
+
 })
 modes.add_binds("passthrough", {
                    { "<Control-g>", "Return to `normal` mode.",
