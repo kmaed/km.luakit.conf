@@ -15,9 +15,49 @@ local function clearhistory()
 end
 clearhistory()
 
+-- follow
+local select = require("select")
+select.label_maker = function ()
+    local chars = charset("asdfghjkl")
+    return trim(sort(reverse(chars)))
+end
+
+local follow = require("follow")
+follow.stylesheet = [===[
+#luakit_select_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2147483647; /* Maximum allowable on WebKit */
+}
+
+#luakit_select_overlay .hint_overlay {
+    display: block;
+    position: absolute;
+    background-color: #ffff99;
+    border: 1px dotted #000;
+    opacity: 0.3;
+}
+
+#luakit_select_overlay .hint_label {
+    display: block;
+    position: absolute;
+    background-color: #000088;
+    border: 1px dashed #000;
+    color: #fff;
+    font-size: 14px;
+    font-family: monospace, courier, sans-serif;
+    opacity: 0.6;
+}
+
+#luakit_select_overlay .hint_selected {
+    background-color: #00ff00 !important;
+}
+]===]
+
 -- key binds (Emacs like)
 local modes = require("modes")
-modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "B", "M", "%",
+modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "M", "%",
                               "gg", "zi", "zo", "zz", "pp", "pt", "pw", "pp", "PP", "PT", "PW",
                               "gT", "gt", "g0", "g$", "gH", "gh", "gy", "ZZ", "ZQ",
                               "<Control-e>", "<Control-y>", "<Control-d>", "<Control-u>",
@@ -100,6 +140,10 @@ modes.add_binds("normal", {
                    {"b", "Go back in the browser history `[count=1]` items.",
                     function (w, m) w:back(m.count) end },
                    {"f", "Go forward in the browser history `[count=1]` times.",
+                    function (w, m) w:forward(m.count) end },
+                   {"B", "Go back in the browser history `[count=1]` items.",
+                    function (w, m) w:back(m.count) end },
+                   {"F", "Go forward in the browser history `[count=1]` times.",
                     function (w, m) w:forward(m.count) end },
                    {"^m$", [[Start `follow` mode. Hint all clickable elements
                             (as defined by the `follow.selectors.clickable`
