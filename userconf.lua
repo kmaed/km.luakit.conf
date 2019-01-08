@@ -10,11 +10,9 @@ soup.accept_policy = "always"
 
 -- clear history
 local history = require("history")
-history.init()
-local function clearhistory()
-   history.db:exec([[ DELETE FROM history ]])
+history.add = function(uri, title, update_visits)
+   -- do nothing
 end
-clearhistory()
 
 -- follow
 local follow = require("follow")
@@ -26,7 +24,6 @@ select.label_maker = function ()
 end
 -- Match only hint label text
 follow.pattern_maker = follow.pattern_styles.match_label
-
 follow.stylesheet = [===[
 #luakit_select_overlay {
     position: absolute;
@@ -129,18 +126,10 @@ modes.add_binds("normal", {
                     function (w) w:scroll{ ypagerel =  -0.95 } end },
                    {"<Control-Mod1-r>", "Restart luakit (reloading configs).",
                     function (w) w:restart() end },
-                   { "<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
+                   {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
                      function (w) w:set_mode("passthrough") end },
                    {"0", actions.zoom.zoom_set},
                    {"=", actions.zoom.zoom_in},
-                   {"o", "Open one or more URLs.",
-                    function (w) clearhistory(); w:enter_cmd(":open ") end },
-                   {"t", "Open one or more URLs in a new tab.",
-                    function (w) clearhistory(); w:enter_cmd(":tabopen ") end },
-                   {"O", "Open one or more URLs based on current location.",
-                     function (w) clearhistory(); w:enter_cmd(":open " .. (w.view.uri or "")) end },
-                   {"T", "Open one or more URLs based on current location in a new tab.",
-                     function (w) clearhistory(); w:enter_cmd(":tabopen " .. (w.view.uri or "")) end },
                    {"b", "Go back in the browser history `[count=1]` items.",
                     function (w, m) w:back(m.count) end },
                    {"f", "Go forward in the browser history `[count=1]` times.",
