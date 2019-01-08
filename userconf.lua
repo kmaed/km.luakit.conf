@@ -17,13 +17,16 @@ end
 clearhistory()
 
 -- follow
+local follow = require("follow")
 local select = require("select")
+-- hint label
 select.label_maker = function ()
     local chars = charset("asdfghjkl")
     return trim(sort(reverse(chars)))
 end
+-- Match only hint label text
+follow.pattern_maker = follow.pattern_styles.match_label
 
-local follow = require("follow")
 follow.stylesheet = [===[
 #luakit_select_overlay {
     position: absolute;
