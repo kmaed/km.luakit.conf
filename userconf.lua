@@ -121,17 +121,19 @@ modes.add_binds("normal", {
                     function (w) w:scroll{ ypagerel =  0.95 } end },
                    {"<Mod1-v>", "Scroll the current page up",
                     function (w) w:scroll{ ypagerel =  -0.95 } end },
-                   { "<space>", "Scroll the current page down",
-                     function (w) w:scroll{ ypagerel =  0.95 } end },
-                   { "<Shift-space>", "Scroll the current page up",
-                     function (w) w:scroll{ ypagerel =  -0.95 } end },
+                   {"<space>", "Scroll the current page down",
+                    function (w) w:scroll{ ypagerel =  0.95 } end },
+                   {"<Shift-space>", "Scroll the current page up",
+                    function (w) w:scroll{ ypagerel =  -0.95 } end },
                    {"<", "Scroll to the top of the document.",
                     function (w) w:scroll{ y =  0 } end },
                    {">", "Scroll to the end of the document.",
                     function (w) w:scroll{ y = -1 } end },
                    {"<Mod1-w>", "Copy current selection to clipboard.", function (w)
-                       luakit.selection.clipboard = luakit.selection.primary
-                       w:notify("Copy to clipboard: " .. luakit.selection.primary)
+                       if luakit.selection.primary then
+                          luakit.selection.clipboard = luakit.selection.primary
+                          w:notify("Copy to clipboard: " .. luakit.selection.primary)
+                       end
                    end },
                    {"<Control-Mod1-w>", "Copy to clipboard.", function (w)
                        local uri = string.gsub(w.view.uri or "", " ", "%%20")
