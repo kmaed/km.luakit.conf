@@ -58,7 +58,7 @@ follow.stylesheet = [===[
 
 -- key binds (Emacs like)
 local modes = require("modes")
-modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "M", "%",
+modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "y", "Y", "M", "%",
                               "gg", "zi", "zo", "zz", "pp", "pt", "pw", "pp", "PP", "PT", "PW",
                               "gT", "gt", "g0", "g$", "gH", "gh", "gy", "ZZ", "ZQ",
                               "<Control-e>", "<Control-y>", "<Control-d>", "<Control-u>",
@@ -124,14 +124,23 @@ modes.add_binds("normal", {
                      function (w) w:scroll{ ypagerel =  0.95 } end },
                    { "<Shift-space>", "Scroll the current page up",
                      function (w) w:scroll{ ypagerel =  -0.95 } end },
-                   {"<Control-Mod1-r>", "Restart luakit (reloading configs).",
-                    function (w) w:restart() end },
-                   {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
-                    function (w) w:set_mode("passthrough") end },
                    {"<", "Scroll to the top of the document.",
                     function (w) w:scroll{ y =  0 } end },
                    {">", "Scroll to the end of the document.",
                     function (w) w:scroll{ y = -1 } end },
+                   {"<Mod1-w>", "Copy current selection to clipboard.", function (w)
+                       luakit.selection.clipboard = luakit.selection.primary
+                       w:notify("Copy to clipboard: " .. luakit.selection.primary)
+                   end },
+                   {"<Control-Mod1-w>", "Copy to clipboard.", function (w)
+                       local uri = string.gsub(w.view.uri or "", " ", "%%20")
+                       luakit.selection.clipboard = uri
+                       w:notify("Copy to clipboard: " .. uri)
+                   end },
+                   {"<Control-Mod1-r>", "Restart luakit (reloading configs).",
+                    function (w) w:restart() end },
+                   {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
+                    function (w) w:set_mode("passthrough") end },
                    {"0", actions.zoom.zoom_set},
                    {"=", actions.zoom.zoom_in},
                    {"b", "Go back in the browser history `[count=1]` items.",
