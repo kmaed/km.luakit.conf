@@ -104,7 +104,7 @@ local actions = { scroll = {
                      },
                 }}
 modes.add_binds("all", {
-                   { "<Control-g>", "Return to `normal` mode.",
+                   {"<Control-g>", "Return to `normal` mode.",
                      function (w)
                         if not w:is_mode("passthrough") then w:set_prompt(); w:set_mode() end
                         return not w:is_mode("passthrough")
@@ -115,8 +115,8 @@ modes.add_binds("normal", {
                    {"<Control-n>", actions.scroll.down},
                    {"<Control-f>", actions.scroll.right},
                    {"<Control-b>", actions.scroll.left},
-                   {"<Control-g>", "Stop loading.",
-                    function (w) w.view:stop() end },
+                   {"<Control-g>", "Stop loading and close the prompt.",
+                    function (w) w.view:stop(); w:set_prompt() end },
                    {"<Control-v>", "Scroll the current page down",
                     function (w) w:scroll{ ypagerel =  0.95 } end },
                    {"<Mod1-v>", "Scroll the current page up",
@@ -192,6 +192,6 @@ modes.add_binds("insert", {
                     function (w) w:set_mode("passthrough") end },
 })
 modes.add_binds("passthrough", {
-                   { "<Control-g>", "Return to `normal` mode.",
-                     function (w) w:set_prompt(); w:set_mode() end },
+                   {"<Control-g>", "Return to `normal` mode.",
+                    function (w) w:set_prompt(); w:set_mode() end },
 })
