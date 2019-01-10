@@ -4,6 +4,7 @@
 local settings = require("settings")
 local lousy = require("lousy")
 local completion = require("completion")
+local keysym = require("keysym")
 
 -- always accept cookie
 soup.accept_policy = "always"
@@ -173,17 +174,20 @@ modes.add_binds("normal", {
                    end },
 })
 modes.add_binds("completion", {
-                   { "<Control-n>", "Select next matching completion item.",
-                     function (w) w.menu:move_down() end },
-                   { "<Control-p>", "Select previous matching completion item.",
-                     function (w) w.menu:move_up() end },
-                   { "<Control-g>", "Stop completion and restore original command.",
-                     completion.exit_completion },
+                   {"<Control-n>", "Select next matching completion item.",
+                    function (w) w.menu:move_down() end },
+                   {"<Control-p>", "Select previous matching completion item.",
+                    function (w) w.menu:move_up() end },
+                   {"<Control-g>", "Stop completion and restore original command.",
+                    completion.exit_completion },
+})
+modes.add_binds("command", {
+                   {"<Control-h>", "Backspace",
+                    function (w) keysym.send(w, "<BackSpace>") end },
 })
 modes.add_binds("insert", {
-                   { "<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
-                     function (w) w:set_mode("passthrough") end },
-
+                   {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
+                    function (w) w:set_mode("passthrough") end },
 })
 modes.add_binds("passthrough", {
                    { "<Control-g>", "Return to `normal` mode.",
