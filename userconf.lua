@@ -109,6 +109,10 @@ modes.add_binds("all", {
                         if not w:is_mode("passthrough") then w:set_prompt(); w:set_mode() end
                         return not w:is_mode("passthrough")
                    end },
+                   {"<Control-h>", "Backspace",
+                    function (w) keysym.send(w, "<BackSpace>") end },
+                   {"<Control-m>", "Return",
+                    function (w) keysym.send(w, "<Return>") end },
 })
 modes.add_binds("normal", {
                    {"<Control-p>", actions.scroll.up},
@@ -182,10 +186,6 @@ modes.add_binds("completion", {
                     function (w) w.menu:move_up() end },
                    {"<Control-g>", "Stop completion and restore original command.",
                     completion.exit_completion },
-})
-modes.add_binds("command", {
-                   {"<Control-h>", "Backspace",
-                    function (w) keysym.send(w, "<BackSpace>") end },
 })
 modes.add_binds("insert", {
                    {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
