@@ -62,6 +62,7 @@ local modes = require("modes")
 modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "y", "Y", "M", "%",
                               "gg", "zi", "zo", "zz", "pp", "pt", "pw", "pp", "PP", "PT", "PW",
                               "gT", "gt", "g0", "g$", "gH", "gh", "gy", "ZZ", "ZQ",
+                              "<Control-f>", "<Control-b>",
                               "<Control-e>", "<Control-y>", "<Control-d>", "<Control-u>",
                               "<Control-o>", "<Control-i>", "<Control-a>", "<Control-x>",
                               "<Control-w>", "<Control-c>", "<Control-z>", "<Control-R>",
@@ -69,24 +70,7 @@ modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "y", "Y", 
                               "<Shift-d>"})
 modes.remove_binds("insert", {"<Control-e>", "<Control-z>"})
 -- from binds.lua
-local actions = { scroll = {
-                     up = {
-                        desc = "Scroll the current page up.",
-                        func = function (w, m) w:scroll{ yrel = -settings.get_setting("window.scroll_step")*(m.count or 1) } end,
-                     },
-                     down = {
-                        desc = "Scroll the current page down.",
-                        func = function (w, m) w:scroll{ yrel =  settings.get_setting("window.scroll_step")*(m.count or 1) } end,
-                     },
-                     left = {
-                        desc = "Scroll the current page left.",
-                        func = function (w, m) w:scroll{ xrel = -settings.get_setting("window.scroll_step")*(m.count or 1) } end,
-                     },
-                     right = {
-                        desc = "Scroll the current page right.",
-                        func = function (w, m) w:scroll{ xrel =  settings.get_setting("window.scroll_step")*(m.count or 1) } end,
-                     },
-}, zoom = {
+local actions = { zoom = {
                      zoom_in = {
                         desc = "Zoom in to the current page.",
                         func = function (w, m) w:zoom_in(settings.get_setting("window.zoom_step") * (m.count or 1)) end,
@@ -113,12 +97,22 @@ modes.add_binds("all", {
                     function (w) keysym.send(w, "<BackSpace>") end },
                    {"<Control-m>", "Return",
                     function (w) keysym.send(w, "<Return>") end },
+                   {"<Control-b>", "Left",
+                    function (w) keysym.send(w, "<Left>") end },
+                   {"<Control-f>", "Right",
+                    function (w) keysym.send(w, "<Right>") end },
+                   {"<Control-p>", "Up",
+                    function (w) keysym.send(w, "<Up>") end },
+                   {"<Control-n>", "Down",
+                    function (w) keysym.send(w, "<Down>") end },
+                   {"<Control-w>", "Cut",
+                    function (w) keysym.send(w, "<Control-x>") end },
+                   {"<Mod1-w>", "Copy",
+                    function (w) keysym.send(w, "<Control-c>") end },
+                   {"<Control-y>", "Paste",
+                    function (w) keysym.send(w, "<Control-v>") end },
 })
 modes.add_binds("normal", {
-                   {"<Control-p>", actions.scroll.up},
-                   {"<Control-n>", actions.scroll.down},
-                   {"<Control-f>", actions.scroll.right},
-                   {"<Control-b>", actions.scroll.left},
                    {"<Control-g>", "Stop loading and close the prompt.",
                     function (w) w.view:stop(); w:set_prompt() end },
                    {"<Control-v>", "Scroll the current page down",
@@ -158,6 +152,8 @@ modes.add_binds("normal", {
                     function (w, m) w:back(m.count) end },
                    {"F", "Go forward in the browser history `[count=1]` times.",
                     function (w, m) w:forward(m.count) end },
+                   {"<BackSpace>", "Go back in the browser history `[count=1]` items.",
+                    function (w, m) w:back(m.count) end },
                    {"^m$", [[Start `follow` mode. Hint all clickable elements
                             (as defined by the `follow.selectors.clickable`
                              selector) and open links in the current tab.]],
@@ -180,10 +176,6 @@ modes.add_binds("normal", {
                    end },
 })
 modes.add_binds("completion", {
-                   {"<Control-n>", "Select next matching completion item.",
-                    function (w) w.menu:move_down() end },
-                   {"<Control-p>", "Select previous matching completion item.",
-                    function (w) w.menu:move_up() end },
                    {"<Control-g>", "Stop completion and restore original command.",
                     completion.exit_completion },
 })
