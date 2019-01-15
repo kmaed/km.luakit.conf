@@ -15,6 +15,9 @@ history.add = function(uri, title, update_visits)
    -- do nothing
 end
 
+-- tab number
+lousy.widget.tab.label_format = '<span foreground="{index_fg}" font="Monospace">{index} </span>{title}'
+
 -- follow
 local follow = require("follow")
 local select = require("select")
