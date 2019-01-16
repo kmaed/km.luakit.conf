@@ -77,9 +77,9 @@ theme.trust_fg          = "#0F0"
 theme.notrust_fg        = "#F00"
 
 -- General colour pairings
-theme.ok = { fg = "#000", bg = "#FFF" }
-theme.warn = { fg = "#F00", bg = "#FFF" }
-theme.error = { fg = "#FFF", bg = "#F00" }
+theme.ok = { fg = theme.ibar_fg, bg = theme.ibar_bg }
+theme.warn = { fg = theme.ibar_fg, bg = theme.ibar_bg }
+theme.error = { fg = theme.ibar_fg, bg = theme.ibar_bg }
 
 return theme
 
