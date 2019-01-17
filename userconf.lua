@@ -62,7 +62,7 @@ follow.stylesheet = [===[
 
 -- key binds (Emacs like)
 local modes = require("modes")
-modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "y", "Y", "M", "%",
+modes.remove_binds("normal", {"j", "k", "h", "l", "^", "$", "i", "w", "y", "Y", "M", "u", "%",
                               "gg", "zi", "zo", "zz", "pp", "pt", "pw", "pp", "PP", "PT", "PW",
                               "gT", "gt", "g0", "g$", "gH", "gh", "gy", "ZZ", "ZQ",
                               "<Control-f>", "<Control-b>",
@@ -141,6 +141,8 @@ modes.add_binds("normal", {
                        luakit.selection.clipboard = uri
                        w:notify("Copy to clipboard: " .. uri)
                    end },
+                   {"<Control-T>", "Undo closed tab (restoring tab history).",
+                     function (w, m) w:undo_close_tab(-m.count) end, {count=1} },
                    {"<Control-Mod1-r>", "Restart luakit (reloading configs).",
                     function (w) w:restart() end },
                    {"<Control-q>", "Enter `passthrough` mode, ignores all luakit keybindings.",
