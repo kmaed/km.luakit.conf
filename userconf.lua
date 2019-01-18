@@ -114,6 +114,19 @@ modes.add_binds("all", {
                     function (w) keysym.send(w, "<Control-c>") end },
                    {"<Control-y>", "Paste",
                     function (w) keysym.send(w, "<Control-v>") end },
+                   { "<Mouse2>", [[Open link under mouse cursor in new tab or navigate to the
+                                   contents of `luakit.selection.primary`.]],
+                     function (w, m)
+                        -- Ignore button 2 clicks in form fields
+                        if not m.context.editable then
+                           -- Open hovered uri in new tab
+                           local uri = w.view.hovered_uri
+                           if uri then
+                              w:new_tab(uri, { switch = false, private = w.view.private })
+                           end
+                        end
+                     end
+                   },
 })
 modes.add_binds("normal", {
                    {"<Control-g>", "Stop loading and close the prompt.",
